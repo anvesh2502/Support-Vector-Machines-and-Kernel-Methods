@@ -40,7 +40,48 @@ def lineartrain(rows) :
         for i in range(len(avg)) :
             avg[i]/=counts[cl]
 
-    return averages                
+    return averages
+
+def dotproduct(v1,v2) :
+
+    return sum([v1[i]*v2[i] for i in range(len(v1))])
+
+
+# Method to determine the class
+
+     # class=sign((X-(M1+M2)/2).(M0-M1))
+
+
+
+def dpclassify(point,avgs) :
+
+    b=(dotproduct(avgs[1],avgs[1])-dotproduct(avgs[0],avgs[0]))/2
+    y=dotproduct(point,avgs[0])-dotproduct(point,avgs[1])+b
+
+    if y>0 : return 0
+    return 1
+
+
+def yesno(v) :
+
+    if v=='yes' : return 1
+    elif v=='no' : return -1
+    return 0
+
+def matchcount(interest1,interest2) :
+
+    l1=interest1.split(':')
+    l2=interest2.split(':')
+    x=0
+    for v in l1 :
+        if v in l2 : x+=1
+    return x
+
+
+
+def milesdistance(a1,a2) :
+    return 0        
+
 
 
 
