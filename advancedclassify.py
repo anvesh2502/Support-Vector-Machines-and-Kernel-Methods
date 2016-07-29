@@ -1,4 +1,10 @@
 from pylab import *
+import json
+import urllib2
+
+google_api_key="AIzaSyDLyGWie8q3Reltbcz8VM1LsDyx3AvaL8M"
+google_maps_url="https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}"
+
 
 class matchrow :
 
@@ -78,9 +84,49 @@ def matchcount(interest1,interest2) :
     return x
 
 
-
 def milesdistance(a1,a2) :
-    return 0        
+    lat1,long1=getlocation(a1)
+    lat2,long2=getlocation(a2)
+    latdiff=69.1*(lat2-lat1)
+    longdiff=53.0*(long2-long1)
+    return (latdiff**2+longdif**2)**0.5
+
+
+
+loc_cache={}
+
+def getlocation(address) :
+
+    l=[]
+
+    for c in address :
+        if c==' ':
+            l.append('+')
+        else :
+            l.append(c)
+
+    address=''.join(l)
+
+
+
+    if address in loc_cache : return loc_cache[address]
+
+    try :
+        json_data=urllib2.urlopen(google_maps_url.format(address,google_api_key)).read()
+    except :
+        print google_maps_url.format(address,google_api_key)
+
+        return
+
+
+    try :
+     lat_long=json.loads(json_data)['results'][0]['geometry']['location']
+    except  :
+        print 'Error fetching map data'
+        return
+    loc_cache[address]=(float(lat_long['lat']),float(lat_long['lng']))
+    return loc_cache[address]
+
 
 
 
